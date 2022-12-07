@@ -1,1 +1,1 @@
-# OpenGL-with-Python
+* TestOpenGL - Minimal app for testing OpenGL and PyGame setup
