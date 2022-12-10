@@ -4,6 +4,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cube import *
 from LoadMesh import *
+from Camera import *
 
 pygame.init()
 
@@ -17,8 +18,8 @@ screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPEN
 pygame.display.set_caption('OpenGL in Python')
 
 cube = Cube(GL_TRIANGLES)
-mesh = LoadMesh("Resources/cube.obj", GL_LINE_LOOP)
-
+mesh = LoadMesh("Resources/teapot.obj", GL_LINE_LOOP)
+camera = Camera()
 
 def initialise():
     glClearColor(background_color[0], background_color[1], background_color[2], background_color[3])
@@ -29,18 +30,18 @@ def initialise():
     glLoadIdentity()
     gluPerspective(60, (screen_width / screen_height), 0.1, 100.0)
 
+def camera_init():
     # modelview
     glMatrixMode(GL_MODELVIEW)
-    glTranslate(0, 0, -5)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
     glEnable(GL_DEPTH_TEST)
-    glTranslate(0, 0, -2)
+    camera.update(screen.get_width(), screen.get_height())
 
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glRotatef(1, 10, 0, 1)
+    camera_init()
     glPushMatrix()
     mesh.draw()
     glPopMatrix()
@@ -48,10 +49,17 @@ def display():
 
 done = False
 initialise()
+pygame.event.set_grab(True)
+pygame.mouse.set_visible(False)
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        if event.type == KEYDOWN:
+            if (event.key == K_ESCAPE):
+                done = True
+                pygame.event.set_grab(False)
+                pygame.mouse.set_visible(True)
     display()
     pygame.display.flip()
     pygame.time.wait(16)
