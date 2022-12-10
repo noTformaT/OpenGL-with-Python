@@ -4,11 +4,15 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from Unils import *
 
 pygame.init()
 
 screen_width = 800
 screen_height = 600
+
+ortho_width = 640
+ortho_height = 480
 
 screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
 
@@ -17,7 +21,7 @@ pygame.display.set_caption("OpenGL in Python")
 def init_ortho():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluOrtho2D(0, 800, 600, 0)
+    gluOrtho2D(0, ortho_width, 0, ortho_height)
 
 def plot_point():
     glBegin(GL_POINTS)
@@ -36,7 +40,8 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
         elif event.type == MOUSEBUTTONDOWN:
-            points.append(pygame.mouse.get_pos())
+            p = pygame.mouse.get_pos()
+            points.append( [map_value(0, screen_width, 0, ortho_width, p[0]),  map_value(0, screen_height, ortho_height, 0, p[1]) ])
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
