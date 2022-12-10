@@ -3,6 +3,7 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cube import *
+from LoadMesh import *
 
 pygame.init()
 
@@ -16,6 +17,7 @@ screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPEN
 pygame.display.set_caption('OpenGL in Python')
 
 cube = Cube(GL_TRIANGLES)
+mesh = LoadMesh("Resources/cube.obj", GL_LINE_LOOP)
 
 
 def initialise():
@@ -40,7 +42,7 @@ def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glRotatef(1, 10, 0, 1)
     glPushMatrix()
-    cube.draw()
+    mesh.draw()
     glPopMatrix()
 
 
