@@ -48,6 +48,23 @@ def save_drawing():
     f.close()
     print("Drawing Saved")
 
+def load_drawing():
+    f = open("Files/drawing.txt", "r")
+    num_of_lines = int(f.readline())
+    global points
+    global line
+    points = []
+    for l in range(num_of_lines):
+        line = []
+        points.append(line)
+        num_of_coords = int(f.readline())
+        for coord_number in range(num_of_coords):
+            px, py = [float(value) for value in next(f).split()]
+            line.append([px, py])
+            #print(str(px) + ", " + str(py))
+    f.close()
+    print("Drawing Loaded")
+
 def plot_graph():
     glBegin(GL_LINE_STRIP)
     px: GL_DOUBLE
@@ -74,6 +91,10 @@ while not done:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
                 save_drawing()
+            elif event.key == pygame.K_l:
+                load_drawing()
+            elif event.key == pygame.K_SPACE:
+                points = []
         elif event.type == MOUSEBUTTONDOWN:
             line = []
             points.append(line)
