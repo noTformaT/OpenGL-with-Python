@@ -9,12 +9,12 @@ from Unils import *
 pygame.init()
 
 screen_width = 800
-screen_height = 600
+screen_height = 800
 
 ortho_left = -400
 ortho_right = 400
-ortho_top = -300
-ortho_bottom = 300
+ortho_top = 0
+ortho_bottom = 800
 
 screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
 
@@ -22,12 +22,13 @@ pygame.display.set_caption("OpenGL in Python")
 
 current_position = (0, 0)
 direction = np.array([0, 1, 0])
-axiom = 'F'
+axiom = 'X'
 rules = {
-    "F": "F[+F]F"
+    "F": "FF",
+    "X": "F+[-F-XF-X][+FF][--XF[+X]][++F-X]"
 }
-draw_length = 10
-angle = 90
+draw_length = 5
+angle = 10
 stack = []
 rule_number = 5
 instructions = ""
@@ -67,9 +68,20 @@ def rest_turtle():
     direction = np.array([0, 1, 0])
 
 def draw_turtle():
-    for i in range(20):
-        forward(200)
-        rotate(170)
+    global direction
+    for c in range(0, len(instructions)):
+        if instructions[c] == 'F':
+            forward(draw_length)
+        elif instructions[c] == '+':
+            rotate(angle)
+        elif instructions[c] == '-':
+            rotate(-angle)
+        elif instructions[c] == '[':
+            stack.append((current_position, direction))
+        elif instructions[c] == ']':
+            current_vector = stack.pop()
+            move_to(current_vector[0])
+            direction = current_vector[1]
 
 def forward(draw_length):
     new_x = current_position[0] + direction[0] * draw_length
@@ -80,9 +92,9 @@ def rotate(angle):
     global direction
     direction = z_rotation(direction, math.radians(angle))
 
-def move_to(x, y):
+def move_to(pos):
     global current_position
-    current_position = (x, y)
+    current_position = (pos[0], pos[1])
 
 done = False
 
