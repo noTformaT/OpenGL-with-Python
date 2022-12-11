@@ -17,6 +17,8 @@ class Mesh:
     
     def draw(self):
         for t in range(0, len(self.triangles), 3):
+            glLineWidth(1)
+            glColor3f(1, 1, 1)
             glBegin(self.draw_type)
             glVertex3fv(self.vertices[self.triangles[t]])
             glVertex3fv(self.vertices[self.triangles[t + 1]])

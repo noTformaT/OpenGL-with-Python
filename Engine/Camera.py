@@ -14,6 +14,7 @@ class Camera:
         self.last_mouse = pygame.math.Vector2(0, 0)
         self.mouse_sensitivityX = 0.1
         self.mouse_sensitivityY = 0.1
+        self.key_sensitivity = 0.008
 
     def rotate(self, yaw, pitch):
         self.yaw += yaw
@@ -45,14 +46,18 @@ class Camera:
 
         #keys
         keys = pygame.key.get_pressed()
-        if (keys[pygame.K_DOWN]):
-            self.eye -= self.forward
-        if (keys[pygame.K_UP]):
-            self.eye += self.forward
-        if (keys[pygame.K_RIGHT]):
-            self.eye += self.right
-        if (keys[pygame.K_LEFT]):
-            self.eye -= self.right
+        if (keys[pygame.K_DOWN] or keys[pygame.K_s]):
+            self.eye -= self.forward * self.key_sensitivity
+        if (keys[pygame.K_UP] or keys[pygame.K_w]):
+            self.eye += self.forward * self.key_sensitivity
+        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
+            self.eye += self.right * self.key_sensitivity
+        if (keys[pygame.K_LEFT] or keys[pygame.K_a]):
+            self.eye -= self.right * self.key_sensitivity
+        if (keys[pygame.K_q]):
+            self.eye -= pygame.math.Vector3(0, 1, 0) * self.key_sensitivity
+        if (keys[pygame.K_e]):
+            self.eye += pygame.math.Vector3(0, 1, 0) * self.key_sensitivity
 
         self.look = self.eye + self.forward
         gluLookAt(

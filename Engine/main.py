@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPEN
 pygame.display.set_caption('OpenGL in Python')
 
 cube = Cube(GL_TRIANGLES)
-mesh = LoadMesh("Resources/teapot.obj", GL_LINE_LOOP)
+mesh = LoadMesh("Resources/cube.obj", GL_LINE_LOOP)
 camera = Camera()
 
 def initialise():
@@ -38,14 +38,54 @@ def camera_init():
     glEnable(GL_DEPTH_TEST)
     camera.update(screen.get_width(), screen.get_height())
 
+def draw_world_axes():
+    glLineWidth(0.1)
+    glBegin(GL_LINES)
+    glColor3f(1, 0, 0)
+    glVertex3f(-1000, 0, 0)
+    glVertex3f(1000, 0, 0)
+
+    glColor3f(0, 1, 0)
+    glVertex3f(0, -1000, 0)
+    glVertex3f(0, 1000, 0)
+
+    glColor3f(0, 0, 1)
+    glVertex3f(0, 0, -1000)
+    glVertex3f(0, 0, 1000)
+
+    glEnd()
+
+    sphere = gluNewQuadric()
+
+    glColor3f(1, 0, 0)
+    glPushMatrix()
+    glTranslatef(1, 0, 0)
+    gluSphere(sphere, 0.05, 10, 10)
+    glPopMatrix()
+
+
+    glColor3f(0, 1, 0)
+    glPushMatrix()
+    glTranslatef(0, 1, 0)
+    gluSphere(sphere, 0.05, 10, 10)
+    glPopMatrix()
+
+    glColor3f(0, 0, 1)
+    glPushMatrix()
+    glTranslatef(0, 0, 1)
+    gluSphere(sphere, 0.05, 10, 10)
+    glPopMatrix()
+
+    glLineWidth(1.0)
+    glColor3f(1, 1, 1)
+
+    
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     camera_init()
-    glPushMatrix()
+    draw_world_axes()
     mesh.draw()
-    glPopMatrix()
-
 
 done = False
 initialise()
