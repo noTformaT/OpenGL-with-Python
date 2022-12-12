@@ -7,18 +7,20 @@ class Rotation:
         self.axis = axis
 
 class Mesh:
-    def __init__(self, vertices, triangles, draw_type, translation, rotaion) -> None:
+    def __init__(self, vertices, triangles, draw_type, translation, rotaion, scale) -> None:
         self.vertices  = vertices
         self.triangles = triangles
         self.draw_type = draw_type
         self.transtation = translation
         self.rotation = rotaion
+        self.scale = scale
     
     def draw(self, move=pygame.Vector3(0, 0, 0)):
         glPushMatrix()
         glTranslatef(move.x, move.y, move.z)
-        glTranslatef(self.transtation.x, self.transtation.y, self.transtation.z) 
+        glTranslatef(self.transtation.x, self.transtation.y, self.transtation.z)
         glRotatef(self.rotation.angle, self.rotation.axis.x, self.rotation.axis.y, self.rotation.axis.z)
+        glScalef(self.scale.x, self.scale.y, self.scale.z)
         for t in range(0, len(self.triangles), 3):
             glLineWidth(1)
             glColor3f(1, 1, 1)
