@@ -3,10 +3,10 @@ from Mesh import *
 import pygame
 
 class LoadMesh(Mesh):
-    def __init__(self, file_name, draw_type, position=pygame.Vector3(0, 0, 0)) -> None:
+    def __init__(self, file_name, draw_type, position=pygame.Vector3(0, 0, 0), rotation=Rotation(0, pygame.Vector3(0, 1, 0))) -> None:
         self.file_name = file_name
         vertices, triangles = self.load_drawing()
-        super().__init__(vertices, triangles, draw_type, position)
+        super().__init__(vertices, triangles, draw_type, position, rotation)
 
     def load_drawing(self):
         vertices = []

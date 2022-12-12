@@ -17,8 +17,8 @@ drawing_color = (1, 1, 1, 1)
 screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
 pygame.display.set_caption('OpenGL in Python')
 
-cube = Cube(position=pygame.Vector3(0, -1, 0))
-mesh = LoadMesh("Resources/cone.obj", GL_LINE_LOOP, position=pygame.Vector3(0, 0, 0))
+cube = Cube(position=pygame.Vector3(0, -1, 0), rotation=Rotation(45, pygame.Vector3(0, 1, 0)))
+mesh = LoadMesh("Resources/cone.obj", GL_LINE_LOOP, position=pygame.Vector3(0, 0, 0), rotation=Rotation(45, pygame.Vector3(1, 0, 0)))
 camera = Camera()
 
 def initialise():
