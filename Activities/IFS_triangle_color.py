@@ -11,10 +11,10 @@ pygame.init()
 screen_width = 700
 screen_height = 700
 
-ortho_left = -400
-ortho_right = 400
+ortho_left = 000
+ortho_right = 600
 ortho_top = 0
-ortho_bottom = 800
+ortho_bottom = 600
 
 screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
 
@@ -70,38 +70,47 @@ def rest_turtle():
 
 def draw_points():
     glBegin(GL_POINTS)
-    t = pygame.time.get_ticks() / 10.0
-    s = math.sin(math.radians(t))
-    s = (s + 1) * 0.5
-    #print(s)
     for p in points:
-
-        x = (p[0] + 400) / 800.0
-        y = (p[1]) / 800.0
-
-        vec = pygame.math.Vector2(x, y)
-        #vec = vec.normalize()
-        len = vec.length()
-        len = 1 - len
-
-        #glColor3f(x, s, len)
+        #color_calc(p[0], p[1])
         glVertex2f(p[0], p[1])
+        glVertex2f(1.0 - p[1], 1 - p[0])
+    glEnd()
+
+def draw_point(x, y):
+    glBegin(GL_POINTS)
+    color_calc(x, y)
+    glVertex2f(x, y)
+    glVertex2f(1.0 - y, 1 - x)
     glEnd()
 
 def draw_turtle():
+
     global x
     global y
-    points.append((x * 80, y * 80))
+    points.append((x, y))
     r = np.random.rand()
 
-    if r < 0.1:
-        x, y = 0.00 * x + 0.00 * y, 0.00 * x + 0.16 * y + 0.0
-    elif r <   0.86:
-        x, y = 0.85 * x + 0.04 * y, -0.04 * x + 0.85 * y + 1.6
-    elif r <   0.93:
-        x, y = 0.2 * x - 0.26 * y, 0.23 * x + 0.22 * y + 1.6
+    if r < 0.33:
+        x, y = 0.5 * x + 0.00 * y + 0.0, x * 0.0 + y * 0.5 + 0.5
+    elif r <   0.66:
+        x, y = 0.5 * x + 0.0 * y + 0.5, x * 0.0 + y * 0.5 + 0.0
     else:
-        x, y = -0.15 * x + 0.28 * y, 0.26 * x + 0.24 * y + 0.44
+        x, y = 0.5 * x + 0.0 * y + 0.0, 0.0 * x + 0.5 * y + 0.0
+
+    #draw_point(x, y)
+
+def color_calc(px, py):
+    r = px
+    g = py
+    b = 0
+
+    vec = pygame.math.Vector2(px, py)
+    len = vec.length()
+    len = 1.0 - len;
+
+    b = len
+    
+    glColor3f(r, g , b)
 
 def forward(draw_length):
     new_x = current_position[0] + direction[0] * draw_length
@@ -121,7 +130,7 @@ done = False
 init_ortho()
 
 glLineWidth(1.0)
-glPointSize(3.0)
+glPointSize(2.0)
 glColor3f(0, 1, 0)
 
 run_rule(rule_number)
@@ -143,15 +152,17 @@ while not done:
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-    #glScaled(80, 80, 1)
+    glTranslate(50, 50, 0)
 
-    rest_turtle()
-    if (is_run):
+    glScaled(500, 500, 1)
+
+    #rest_turtle()
+    if is_run:
         draw_turtle()
     draw_points()
 
     pygame.display.flip()
     #pygame.time.wait(16)
-    pygame.time.wait(1)
+    #pygame.time.wait(1)
 
 pygame.quit()
