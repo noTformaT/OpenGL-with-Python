@@ -12,9 +12,14 @@ class PyOGLApp:
         self.screen_height = screen_height
         pygame.init()
 
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLESAMPLES, 4)
+        pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK, pygame.GL_CONTEXT_PROFILE_CORE)
+
         self.screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
         pygame.display.set_caption('Кеп ебаше магію')
         self.camera = Camera(init_pos=pygame.math.Vector3(-1,1,1))
+        self.program_id = None
 
     def draw_world_axes(self):
         glLineWidth(0.1)
