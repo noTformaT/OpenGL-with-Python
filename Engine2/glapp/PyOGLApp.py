@@ -18,7 +18,8 @@ class PyOGLApp:
 
         self.screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
         pygame.display.set_caption('Кеп ебаше магію')
-        self.camera = Camera(init_pos=pygame.math.Vector3(-1,1,1))
+        #self.camera = Camera(init_pos=pygame.math.Vector3(-1,1,1))
+        self.camera = Camera()
         self.program_id = None
 
     def draw_world_axes(self):
