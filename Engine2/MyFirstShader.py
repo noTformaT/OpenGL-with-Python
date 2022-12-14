@@ -7,21 +7,26 @@ vertex_shader = r'''
 #version 330
 
 in vec3 position;
+in vec3 vertex_color;
+out vec3 color;
 
 void main()
 {
     gl_Position = vec4(position.x, position.y, position.z, 1);
+    color = vertex_color;
 }
 '''
 
 fragment_shader = r'''
 #version 330 core
 
+in vec3 color;
+
 out vec4 frag_color;
 
 void main()
 {
-    frag_color = vec4(0, 1, 0, 1);
+    frag_color = vec4(color, 1);
 }
 '''
 
@@ -49,12 +54,22 @@ class MyFirstShader(PyOGLApp):
         position_varible = GraphicsData("vec3", position_data)
         position_varible.create_variable(self.program_id, "position")
 
+        color_data = [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+            [1, 1, 0],
+            [0, 1, 1],
+        ]
+        color_varible = GraphicsData("vec3", color_data)
+        color_varible.create_variable(self.program_id, "vertex_color")
+
     def camera_init(self):
         pass
 
     def display(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(self.program_id)
-        glDrawArrays(GL_POINTS, 0, self.vertex_count)
+        glDrawArrays(GL_LINE_LOOP, 0, self.vertex_count)
 
 MyFirstShader().mainLoop()
