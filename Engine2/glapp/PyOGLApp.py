@@ -6,15 +6,15 @@ from OpenGL.GLU import *
 
 class PyOGLApp:
     def __init__(self, screenPosx, screenPosY, screen_width, screen_height) -> None:
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d, %d" % (screenPosx, screenPosY)
+        #os.environ['SDL_VIDEO_WINDOW_POS'] = "%d, %d" % (screenPosx, screenPosY)
 
         self.screen_width = screen_width
         self.screen_height = screen_height
         pygame.init()
 
-        screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
-        pygame.display.set_caption('OpenGL in Python')
-        self.camera = Camera()
+        self.screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
+        pygame.display.set_caption('Кеп ебаше магію')
+        self.camera = Camera(init_pos=pygame.math.Vector3(-1,1,1))
 
     def draw_world_axes(self):
         glLineWidth(0.1)
@@ -38,20 +38,20 @@ class PyOGLApp:
         glColor3f(1, 0, 0)
         glPushMatrix()
         glTranslatef(1, 0, 0)
-        gluSphere(sphere, 0.05, 10, 10)
+        gluSphere(sphere, 0.01, 10, 10)
         glPopMatrix()
 
 
         glColor3f(0, 1, 0)
         glPushMatrix()
         glTranslatef(0, 1, 0)
-        gluSphere(sphere, 0.05, 10, 10)
+        gluSphere(sphere, 0.01, 10, 10)
         glPopMatrix()
 
         glColor3f(0, 0, 1)
         glPushMatrix()
         glTranslatef(0, 0, 1)
-        gluSphere(sphere, 0.05, 10, 10)
+        gluSphere(sphere, 0.01, 10, 10)
         glPopMatrix()
 
         glLineWidth(1.0)
@@ -68,7 +68,7 @@ class PyOGLApp:
 
     def mainLoop(self):
         done = False
-        self.initialise()
+        self.initialize()
         pygame.event.set_grab(True)
         pygame.mouse.set_visible(False)
         while not done:
