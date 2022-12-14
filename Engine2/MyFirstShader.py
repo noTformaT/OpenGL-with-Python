@@ -3,17 +3,22 @@ from glapp.GraphicsData import *
 import numpy as np
 from glapp.Utils import *
 from glapp.Square import *
+from glapp.Triangle import *
 
 vertex_shader = r'''
 #version 330
 
 in vec3 position;
 in vec3 vertex_color;
+
 out vec3 color;
+
+uniform vec3 translation;
 
 void main()
 {
-    gl_Position = vec4(position.x, position.y, position.z, 1);
+    vec3 pos = position + translation;
+    gl_Position = vec4(pos, 1);
     color = vertex_color;
 }
 '''
@@ -33,12 +38,14 @@ void main()
 
 class MyFirstShader(PyOGLApp):
     def __init__(self) -> None:
-        super().__init__(0, 0, 1000, 800)
+        super().__init__(0, 0, 700, 700)
         self.square = None
+        self.triangle = None
 
     def initialize(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
-        self.square = Square(self.program_id)
+        self.square = Square(self.program_id, pygame.Vector3(-1, 0, 0))
+        self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
         
 
     def camera_init(self):
@@ -48,5 +55,6 @@ class MyFirstShader(PyOGLApp):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(self.program_id)
         self.square.draw()
+        self.triangle.draw()
 
 MyFirstShader().mainLoop()

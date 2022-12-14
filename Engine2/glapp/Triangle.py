@@ -1,13 +1,12 @@
 from .Mesh import *
 
-class Square(Mesh):
+class Triangle(Mesh):
     def __init__(self, program_id, location) -> None:
         
         vertices = [
             [ 0.5, 0.5,-1.0],
             [ 0.5,-0.5,-1.0],
-            [-0.5,-0.5,-1.0],
-            [-0.5, 0.5,-1.0]
+            [-0.5,-0.5,-1.0]
         ]
 
         colors = [
