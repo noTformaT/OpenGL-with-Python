@@ -12,7 +12,7 @@ class Camera:
         self.first_mouse = True
         self.mouse_sensitivityX = 0.1
         self.mouse_sensitivityY = 0.1
-        self.key_sensitivity = 0.008
+        self.key_sensitivity = 0.08
         self.projection_mat = self.perspective_mat(60, w/h, 0.01, 10000)
         self.projection = Uniform("mat4", self.projection_mat)
         self.projection.find_variable(program_id, "projection_mat")

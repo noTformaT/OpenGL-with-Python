@@ -5,6 +5,7 @@ from glapp.Utils import *
 from glapp.Square import *
 from glapp.Triangle import *
 from glapp.Axes import *
+from glapp.Cube import *
 
 vertex_shader = r'''
 #version 330
@@ -44,6 +45,7 @@ class Projections(PyOGLApp):
         self.axes = None
         self.square = None
         self.triangle = None
+        self.cube = None
 
     def initialize(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
@@ -51,6 +53,7 @@ class Projections(PyOGLApp):
         self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
         self.axes = Axes(self.program_id, pygame.Vector3(0,0,0))
+        self.cube = Cube(self.program_id)
         glEnable(GL_DEPTH_TEST)
 
     def camera_init(self):
@@ -63,5 +66,6 @@ class Projections(PyOGLApp):
         self.square.draw()
         self.triangle.draw()
         self.axes.draw()
+        self.cube.draw()
 
 Projections().mainLoop()
