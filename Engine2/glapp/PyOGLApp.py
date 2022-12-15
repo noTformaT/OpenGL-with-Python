@@ -21,47 +21,7 @@ class PyOGLApp:
         pygame.display.set_caption('Кеп єбаше магію')
         self.camera = None
         self.program_id = None
-
-    def draw_world_axes(self):
-        glLineWidth(0.1)
-        glBegin(GL_LINES)
-        glColor3f(1, 0, 0)
-        glVertex3f(-1000, 0, 0)
-        glVertex3f(1000, 0, 0)
-
-        glColor3f(0, 1, 0)
-        glVertex3f(0, -1000, 0)
-        glVertex3f(0, 1000, 0)
-
-        glColor3f(0, 0, 1)
-        glVertex3f(0, 0, -1000)
-        glVertex3f(0, 0, 1000)
-
-        glEnd()
-
-        sphere = gluNewQuadric()
-
-        glColor3f(1, 0, 0)
-        glPushMatrix()
-        glTranslatef(1, 0, 0)
-        gluSphere(sphere, 0.01, 10, 10)
-        glPopMatrix()
-
-
-        glColor3f(0, 1, 0)
-        glPushMatrix()
-        glTranslatef(0, 1, 0)
-        gluSphere(sphere, 0.01, 10, 10)
-        glPopMatrix()
-
-        glColor3f(0, 0, 1)
-        glPushMatrix()
-        glTranslatef(0, 0, 1)
-        gluSphere(sphere, 0.01, 10, 10)
-        glPopMatrix()
-
-        glLineWidth(1.0)
-        glColor3f(1, 1, 1)
+        self.clock = pygame.time.Clock()
     
     def initialize(self):
         pass
@@ -89,5 +49,5 @@ class PyOGLApp:
             self.camera_init()
             self.display()
             pygame.display.flip()
-            pygame.time.wait(16)
+            self.clock.tick(60)
         pygame.quit()

@@ -10,6 +10,9 @@ class Uniform:
         self.variable_id = glGetUniformLocation(program_id, variable_name)
         a = 5
 
+    def update_data(self, data):
+        self.data = data
+
     def load(self):
         if self.data_type == "vec3":
             glUniform3f(self.variable_id, self.data[0], self.data[1], self.data[2])
