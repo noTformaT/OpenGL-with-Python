@@ -22,6 +22,7 @@ class Mesh:
         colors.create_variable(program_id, "vertex_color")
 
         self.transfomation_mat = identity_mat()
+        self.transfomation_mat = rotateA(self.transfomation_mat, rotation.angle, rotation.axis)
         self.transfomation_mat = translate(self.transfomation_mat, translation.x, translation.y, translation.z)
         self.transfomation_mat = scale3(self.transfomation_mat, sc.x, sc.y, sc.z)
         

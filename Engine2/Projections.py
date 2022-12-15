@@ -59,7 +59,8 @@ class Projections(PyOGLApp):
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
         self.axes = Axes(self.program_id)
         self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
-        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id, scale=pygame.Vector3(2,1,1))
+        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id, scale=pygame.Vector3(2,1,1), 
+            rotation=Rotation(45, pygame.Vector3(1, 0, 1)))
         self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
         self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
         self.cortex = LoadMesh("Resources/cortex.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
