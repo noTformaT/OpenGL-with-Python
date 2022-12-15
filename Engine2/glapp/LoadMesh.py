@@ -3,11 +3,14 @@ from .Mesh import *
 import pygame
 import random
 from .Utils import *
+from .Transformations import *
+
 
 class LoadMesh(Mesh):
-    def __init__(self, file_name, program_id, draw_type=GL_TRIANGLES, location=pygame.Vector3(0, 0, 0)):
-        #, rotation=Rotation(0, pygame.Vector3(0, 1, 0)), 
-        # scale=pygame.Vector3(1, 1, 1)) -> None:
+    def __init__(self, file_name, program_id, draw_type=GL_TRIANGLES, 
+                location=pygame.Vector3(0, 0, 0),
+                rotation=Rotation(0, pygame.Vector3(0, 1, 0)), 
+                scale=pygame.Vector3(1, 1, 1)) -> None:
         coordinates, triangles = self.load_drawing(file_name)
         vertices = format_vertices(coordinates, triangles)
         colors = []
@@ -15,7 +18,7 @@ class LoadMesh(Mesh):
             colors.append(random.random())
             colors.append(random.random())
             colors.append(random.random())
-        super().__init__(program_id, vertices, colors, draw_type, location)
+        super().__init__(program_id, vertices, colors, draw_type, location, rotation, scale)
 
     def load_drawing(self, file_name):
         vertices = []

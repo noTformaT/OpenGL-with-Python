@@ -6,7 +6,10 @@ from .Uniform import *
 from .Transformations import *
 
 class Mesh:
-    def __init__(self, program_id, vertices, vertex_colors, draw_type, translation=pygame.Vector3(0, 0, 0)) -> None:
+    def __init__(self, program_id, vertices, vertex_colors, draw_type, 
+        translation=pygame.Vector3(0, 0, 0),
+        rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
+        sc=pygame.Vector3(1, 1, 1)) -> None:
         self.vertices = vertices
         self.draw_type = draw_type
         self.vao_ref = glGenVertexArrays(1)
@@ -20,6 +23,7 @@ class Mesh:
 
         self.transfomation_mat = identity_mat()
         self.transfomation_mat = translate(self.transfomation_mat, translation.x, translation.y, translation.z)
+        self.transfomation_mat = scale3(self.transfomation_mat, sc.x, sc.y, sc.z)
         
         self.transfomation = Uniform("mat4", self.transfomation_mat)
         self.transfomation.find_variable(program_id, "model_mat")

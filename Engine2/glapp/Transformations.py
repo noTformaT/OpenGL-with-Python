@@ -2,6 +2,11 @@ import numpy as np
 from math import *
 
 
+class Rotation:
+    def __init__(self, angle, axis) -> None:
+        self.angle = angle
+        self.axis = axis
+
 def identity_mat():
     return np.array(
         [
