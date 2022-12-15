@@ -6,6 +6,7 @@ from glapp.Square import *
 from glapp.Triangle import *
 from glapp.Axes import *
 from glapp.Cube import *
+from glapp.LoadMesh import *
 
 vertex_shader = r'''
 #version 330
@@ -46,14 +47,22 @@ class Projections(PyOGLApp):
         self.square = None
         self.triangle = None
         self.cube = None
+        self.teapot = None
+        self.monkey = None
+        self.crah = None
+        self.cortex = None
 
     def initialize(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
         self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
         self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
-        self.axes = Axes(self.program_id, pygame.Vector3(0,0,0))
-        self.cube = Cube(self.program_id)
+        self.axes = Axes(self.program_id)
+        self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
+        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id)
+        self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
+        self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
+        self.cortex = LoadMesh("Resources/cortex.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
         glEnable(GL_DEPTH_TEST)
 
     def camera_init(self):
@@ -67,5 +76,9 @@ class Projections(PyOGLApp):
         self.triangle.draw()
         self.axes.draw()
         self.cube.draw()
+        self.teapot.draw()
+        self.monkey.draw()
+        self.crash.draw()
+        self.cortex.draw()
 
 Projections().mainLoop()
