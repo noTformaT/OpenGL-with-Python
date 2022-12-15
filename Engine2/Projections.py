@@ -4,6 +4,7 @@ import numpy as np
 from glapp.Utils import *
 from glapp.Square import *
 from glapp.Triangle import *
+from glapp.Axes import *
 
 vertex_shader = r'''
 #version 330
@@ -40,6 +41,7 @@ void main()
 class Projections(PyOGLApp):
     def __init__(self) -> None:
         super().__init__(0, 0, 700, 700)
+        self.axes = None
         self.square = None
         self.triangle = None
 
@@ -48,6 +50,8 @@ class Projections(PyOGLApp):
         self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
         self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
+        self.axes = Axes(self.program_id, pygame.Vector3(0,0,0))
+        glEnable(GL_DEPTH_TEST)
 
     def camera_init(self):
         pass
@@ -58,5 +62,6 @@ class Projections(PyOGLApp):
         self.camera.update()
         self.square.draw()
         self.triangle.draw()
+        self.axes.draw()
 
 Projections().mainLoop()

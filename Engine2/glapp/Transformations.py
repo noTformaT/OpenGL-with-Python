@@ -83,7 +83,7 @@ def scale3(matrix, sx, sy, sz):
     sc = scale_mat3(sx, sy, sz)
     return matrix @ sc
 
-def rotate(matrix, angle, axis):
+def rotate(matrix, angle, axis, local=True):
     rot = identity_mat()
     if axis == "X":
         rot = rotate_x_max(angle)
@@ -91,4 +91,9 @@ def rotate(matrix, angle, axis):
         rot = rotate_y_max(angle)
     elif axis == "Z":
         rot = rotate_z_max(angle)
-    return matrix @ rot
+
+
+    if local:
+        return matrix @ rot
+    else:
+        return rot @ matrix
