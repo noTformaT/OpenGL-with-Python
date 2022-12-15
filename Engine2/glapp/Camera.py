@@ -3,9 +3,11 @@ from OpenGL.GLU import *
 from math import *
 import numpy as np
 from .Transformations import *
+from .Uniform import *
 
 class Camera:
     def __init__(self, program_id, w, h) -> None:
+        self.program_id = program_id
         self.transformation = identity_mat()
         self.last_mouse = pygame.math.Vector2(pygame.mouse.get_pos())
         self.first_mouse = True
@@ -13,6 +15,8 @@ class Camera:
         self.mouse_sensitivityY = 0.1
         self.key_sensitivity = 0.008
         self.projection_mat = self.perspective_mat(60, w/h, 0.01, 10000)
+        self.projection = Uniform("mat4", self.projection_mat)
+        self.projection.find_variable(program_id, "projection_mat")
 
     def perspective_mat(self, angle_of_view, aspect_ratio, near_plane, far_plane):
         a = radians(angle_of_view)
@@ -59,3 +63,9 @@ class Camera:
             self.transformation = translate(self.transformation, 0, -self.key_sensitivity, 0)
         if (keys[pygame.K_e]):
             self.transformation = translate(self.transformation, 0, self.key_sensitivity, 0)
+
+        self.projection.load()
+        lookat_mat = self.transformation
+        lookat = Uniform("mat4,", lookat_mat)
+        lookat.find_variable(self.program_id, "view_mat")
+        lookat.load()
