@@ -8,6 +8,7 @@ class Uniform:
 
     def find_variable(self, program_id, variable_name):
         self.variable_id = glGetUniformLocation(program_id, variable_name)
+        a = 5
 
     def load(self):
         if self.data_type == "vec3":

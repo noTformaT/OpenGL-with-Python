@@ -37,7 +37,7 @@ void main()
 }
 '''
 
-class MyFirstShader(PyOGLApp):
+class Projections(PyOGLApp):
     def __init__(self) -> None:
         super().__init__(0, 0, 700, 700)
         self.square = None
@@ -45,9 +45,9 @@ class MyFirstShader(PyOGLApp):
 
     def initialize(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
-        self.square = Square(self.program_id, pygame.Vector3(-1, 0, 0))
+        self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
         self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
-        
+        self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
 
     def camera_init(self):
         pass
@@ -55,7 +55,8 @@ class MyFirstShader(PyOGLApp):
     def display(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(self.program_id)
+        self.camera.update()
         self.square.draw()
         self.triangle.draw()
 
-MyFirstShader().mainLoop()
+Projections().mainLoop()

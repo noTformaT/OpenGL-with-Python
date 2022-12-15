@@ -7,7 +7,6 @@ from .Uniform import *
 
 class Camera:
     def __init__(self, program_id, w, h) -> None:
-        self.program_id = program_id
         self.transformation = identity_mat()
         self.last_mouse = pygame.math.Vector2(pygame.mouse.get_pos())
         self.first_mouse = True
@@ -17,6 +16,9 @@ class Camera:
         self.projection_mat = self.perspective_mat(60, w/h, 0.01, 10000)
         self.projection = Uniform("mat4", self.projection_mat)
         self.projection.find_variable(program_id, "projection_mat")
+        self.program_id = program_id
+        self.screen_width = w
+        self.screen_height = h
 
     def perspective_mat(self, angle_of_view, aspect_ratio, near_plane, far_plane):
         a = radians(angle_of_view)
@@ -35,7 +37,7 @@ class Camera:
         self.transformation = rotate(self.transformation, yaw, "Y")
         self.transformation = rotate(self.transformation, pitch, "X")
 
-    def update(self, w, h):
+    def update(self):
         if pygame.mouse.get_visible():
             return
 
@@ -45,7 +47,7 @@ class Camera:
             self.first_mouse = False
         mouse_pos = pygame.mouse.get_pos()
         mouse_change = self.last_mouse - pygame.math.Vector2(mouse_pos)
-        pygame.mouse.set_pos(w/2, h/2)
+        pygame.mouse.set_pos(self.screen_width/2, self.screen_height/2)
         self.last_mouse = pygame.mouse.get_pos()
         self.rotate(mouse_change.x * self.mouse_sensitivityX, mouse_change.y * self.mouse_sensitivityY)
 
@@ -66,6 +68,6 @@ class Camera:
 
         self.projection.load()
         lookat_mat = self.transformation
-        lookat = Uniform("mat4,", lookat_mat)
+        lookat = Uniform("mat4", lookat_mat)
         lookat.find_variable(self.program_id, "view_mat")
         lookat.load()

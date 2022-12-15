@@ -3,6 +3,7 @@ import pygame
 from .GraphicsData import *
 import numpy as np
 from .Uniform import *
+from .Transformations import *
 
 class Mesh:
     def __init__(self, program_id, vertices, vertex_colors, draw_type, translation=pygame.Vector3(0, 0, 0)) -> None:
@@ -17,10 +18,14 @@ class Mesh:
         colors = GraphicsData("vec3", vertex_colors)
         colors.create_variable(program_id, "vertex_color")
 
-        self.tranlation = Uniform("vec3", translation)
-        self.tranlation.find_variable(program_id, "translation")
+        self.transfomation_mat = identity_mat()
+        self.transfomation_mat = translate(self.transfomation_mat, translation.x, translation.y, translation.z)
+        
+        self.transfomation = Uniform("mat4", self.transfomation_mat)
+        self.transfomation.find_variable(program_id, "model_mat")
+
 
     def draw(self):
-        self.tranlation.load()
+        self.transfomation.load()
         glBindVertexArray(self.vao_ref)
         glDrawArrays(self.draw_type, 0, len(self.vertices))
