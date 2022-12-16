@@ -19,6 +19,8 @@ in vec2 vertex_uv;
 out vec3 color;
 out vec3 normal;
 out vec2 uv;
+out vec3 frag_pos;
+out vec3 light_pos;
 
 uniform mat4 projection_mat;
 uniform mat4 model_mat;
@@ -26,10 +28,13 @@ uniform mat4 view_mat;
 
 void main()
 {
+    light_pos = vec3(5, 5, 5);
+    //light_pos = vec3(view_mat[3][0], view_mat[3][1], view_mat[3][2]);
     gl_Position = projection_mat * inverse(view_mat)  * model_mat * vec4(position, 1);
     color = vertex_color;
-    normal = vertex_normal;
+    normal = mat3(transpose(inverse(model_mat))) * vertex_normal;;
     uv = vertex_uv;
+    frag_pos = vec3(model_mat * vec4(position, 1));
 }
 '''
 
@@ -39,12 +44,23 @@ fragment_shader = r'''
 in vec3 color;
 in vec3 normal;
 in vec2 uv;
+in vec3 frag_pos;
+in vec3 light_pos;
 
 out vec4 frag_color;
 
 void main()
 {
-    frag_color = vec4(uv, 0, 1);
+    vec3 light_color = vec3(1, 1, 1);
+    vec3 norm = normalize(normal);
+    vec3 light_dir = normalize(light_pos - frag_pos);
+    float dif = max(dot(norm, light_dir), 0.0);
+    vec3 diffuse = light_color * dif;
+
+    vec3 ee = vec3(dif, dif, dif);
+
+
+    frag_color = vec4(ee, 1);
 }
 '''
 
@@ -67,13 +83,13 @@ class Projections(PyOGLApp):
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
         #self.axes = Axes(self.program_id)
         #self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
-        self.teapot = LoadMesh("Resources/cortex.obj", self.program_id, 
+        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id, 
             location=pygame.Vector3(0, 0, 0),
             scale=pygame.Vector3(1,1,1), 
             rotation=Rotation(0, pygame.Vector3(0, 1, 0)))
-        #self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
-        #self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
-        #self.cortex = LoadMesh("Resources/cortex.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
+        self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
+        self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
+        self.cortex = LoadMesh("Resources/donut.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
         glEnable(GL_DEPTH_TEST)
 
     def camera_init(self):
@@ -85,14 +101,17 @@ class Projections(PyOGLApp):
         self.camera.update()
         
         self.teapot.update()
+        #self.monkey.update()
+        #self.crash.update()
+        #self.cortex.update()
         
         #self.square.draw()
         #self.triangle.draw()
         #self.axes.draw()
         #self.cube.draw()
         self.teapot.draw()
-        #self.monkey.draw()
-        #self.crash.draw()
-        #self.cortex.draw()
+        self.monkey.draw()
+        self.crash.draw()
+        self.cortex.draw()
 
 Projections().mainLoop()

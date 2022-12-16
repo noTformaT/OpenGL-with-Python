@@ -31,9 +31,10 @@ class Mesh:
         
 
         self.transfomation_mat = identity_mat()
-        self.transfomation_mat = rotate(self.transfomation_mat, rotation.angle, "Y")
+        self.transfomation_mat = rotateA(self.transfomation_mat, rotation.angle, rotation.axis)
         self.transfomation_mat = translate(self.transfomation_mat, translation.x, translation.y, translation.z)
         self.transfomation_mat = scale3(self.transfomation_mat, sc.x, sc.y, sc.z)
+        
         
         self.transfomation = Uniform("mat4", self.transfomation_mat)
         self.transfomation.find_variable(program_id, "model_mat")

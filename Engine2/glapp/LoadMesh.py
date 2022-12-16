@@ -20,10 +20,10 @@ class LoadMesh(Mesh):
         colors = []
         for i in range(len(vertices)):
             c = []
-            c.append(random.random())
-            c.append(random.random())
-            c.append(random.random())
-            colors.append(c)
+            #c.append(random.random())
+            #c.append(random.random())
+            #c.append(random.random())
+            colors.append([1, 1, 1])
         super().__init__(program_id, vertices, vertex_normal, vertex_uv, colors, draw_type, location, rotation, scale)
 
     def load_drawing(self, file_name):
