@@ -12,9 +12,13 @@ vertex_shader = r'''
 #version 330
 
 in vec3 position;
+in vec3 vertex_normal;
 in vec3 vertex_color;
+in vec2 vertex_uv;
 
 out vec3 color;
+out vec3 normal;
+out vec2 uv;
 
 uniform mat4 projection_mat;
 uniform mat4 model_mat;
@@ -24,6 +28,8 @@ void main()
 {
     gl_Position = projection_mat * inverse(view_mat)  * model_mat * vec4(position, 1);
     color = vertex_color;
+    normal = vertex_normal;
+    uv = vertex_uv;
 }
 '''
 
@@ -31,12 +37,14 @@ fragment_shader = r'''
 #version 330 core
 
 in vec3 color;
+in vec3 normal;
+in vec2 uv;
 
 out vec4 frag_color;
 
 void main()
 {
-    frag_color = vec4(color, 1);
+    frag_color = vec4(uv, 0, 1);
 }
 '''
 
@@ -54,18 +62,18 @@ class Projections(PyOGLApp):
 
     def initialize(self):
         self.program_id = create_program(vertex_shader, fragment_shader)
-        self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
-        self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
+        #self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
+        #self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
-        self.axes = Axes(self.program_id)
-        self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
-        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id, 
-            location=pygame.Vector3(2, 0, 0),
+        #self.axes = Axes(self.program_id)
+        #self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
+        self.teapot = LoadMesh("Resources/cortex.obj", self.program_id, 
+            location=pygame.Vector3(0, 0, 0),
             scale=pygame.Vector3(1,1,1), 
             rotation=Rotation(0, pygame.Vector3(0, 1, 0)))
-        self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
-        self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
-        self.cortex = LoadMesh("Resources/cortex.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
+        #self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
+        #self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
+        #self.cortex = LoadMesh("Resources/cortex.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
         glEnable(GL_DEPTH_TEST)
 
     def camera_init(self):
@@ -80,7 +88,7 @@ class Projections(PyOGLApp):
         
         #self.square.draw()
         #self.triangle.draw()
-        self.axes.draw()
+        #self.axes.draw()
         #self.cube.draw()
         self.teapot.draw()
         #self.monkey.draw()

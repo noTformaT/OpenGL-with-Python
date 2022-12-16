@@ -6,7 +6,7 @@ from .Uniform import *
 from .Transformations import *
 
 class Mesh:
-    def __init__(self, program_id, vertices, vertex_colors, draw_type, 
+    def __init__(self, program_id, vertices, v_normals, v_uvs, vertex_colors, draw_type, 
         translation=pygame.Vector3(0, 0, 0),
         rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
         sc=pygame.Vector3(1, 1, 1)) -> None:
@@ -19,8 +19,16 @@ class Mesh:
         position = GraphicsData("vec3", self.vertices)
         position.create_variable(program_id, "position")
 
+        normals = GraphicsData("vec3", v_normals)
+        normals.create_variable(program_id, "vertex_normal")
+
         colors = GraphicsData("vec3", vertex_colors)
         colors.create_variable(program_id, "vertex_color")
+
+        uv = GraphicsData("vec2", v_uvs)
+        uv.create_variable(program_id, "vertex_uv")
+
+        
 
         self.transfomation_mat = identity_mat()
         self.transfomation_mat = rotate(self.transfomation_mat, rotation.angle, "Y")
