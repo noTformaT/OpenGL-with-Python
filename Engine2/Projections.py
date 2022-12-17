@@ -124,7 +124,7 @@ class Projections(PyOGLApp):
         self.axes = None
         self.square = None
         self.triangle = None
-        self.cube = None
+        #self.cube = None
         self.teapot = None
         self.monkey = None
         self.crah = None
