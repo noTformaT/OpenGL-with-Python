@@ -21,6 +21,7 @@ out vec3 normal;
 out vec2 uv;
 out vec3 frag_pos;
 out vec3 light_pos;
+out vec3 view_pos;
 
 uniform mat4 projection_mat;
 uniform mat4 model_mat;
@@ -28,7 +29,8 @@ uniform mat4 view_mat;
 
 void main()
 {
-    light_pos = vec3(5, 5, 5);
+    light_pos = vec3(2, 2, 5);
+    view_pos = vec3(vec4(view_mat[3][0], view_mat[3][1], view_mat[3][2], 1));
     //light_pos = vec3(view_mat[3][0], view_mat[3][1], view_mat[3][2]);
     gl_Position = projection_mat * inverse(view_mat)  * model_mat * vec4(position, 1);
     color = vertex_color;
@@ -46,21 +48,56 @@ in vec3 normal;
 in vec2 uv;
 in vec3 frag_pos;
 in vec3 light_pos;
+in vec3 view_pos;
 
 out vec4 frag_color;
 
 void main()
 {
-    vec3 light_color = vec3(1, 1, 1);
+    vec3 light_color = vec3(1, 0, 0);
+
+    //ambient
+    float a_strength = 0.1;
+    vec3 ambient = a_strength * light_color;
+
+    // diffuse
+    float diff_strength = 0.3;
     vec3 norm = normalize(normal);
     vec3 light_dir = normalize(light_pos - frag_pos);
     float dif = max(dot(norm, light_dir), 0.0);
-    vec3 diffuse = light_color * dif;
+    vec3 diffuse = light_color * dif * diff_strength;
 
-    vec3 ee = vec3(dif, dif, dif);
+    // specular
+    float s_strenth = 1.0;
+    vec3 view_dir = normalize(view_pos-frag_pos);
+    vec3 reflect_dir = normalize(-light_dir -norm);
+    float spec = pow(max(dot(view_dir, reflect_dir), 0), 128);
+    
+
+    vec3 direction = frag_pos - light_pos;
+    vec3 fragToEye = normalize(view_pos - frag_pos);
+    vec3 reflectedVertex = normalize(reflect(direction, normalize(normal)));
+    float specularFactor = dot(fragToEye, reflectedVertex);
+
+    if (specularFactor > 0.0f)
+    {
+        specularFactor = pow(specularFactor, 128);
+    }
+    else
+    {
+        specularFactor = 0;
+    }
+
+    vec3 specular = s_strenth * specularFactor * light_color;
+
+    vec3 ee = vec3(specularFactor, specularFactor, specularFactor);
 
 
-    frag_color = vec4(ee, 1);
+    frag_color = vec4(color * (ambient + diffuse + specular), 1);
+
+    //frag_color = vec4(reflect_dir, 1);
+
+
 }
 '''
 
@@ -101,9 +138,9 @@ class Projections(PyOGLApp):
         self.camera.update()
         
         self.teapot.update()
-        #self.monkey.update()
-        #self.crash.update()
-        #self.cortex.update()
+        self.monkey.update()
+        self.crash.update()
+        self.cortex.update()
         
         #self.square.draw()
         #self.triangle.draw()
