@@ -1,7 +1,10 @@
 from .Mesh import *
 
 class Axes(Mesh):
-    def __init__(self, program_id, location=pygame.Vector3(0, 0, 0)) -> None:
+    def __init__(self, 
+            location=pygame.Vector3(0, 0, 0),
+            material=None
+        ) -> None:
         
         vertices = [
             [ -100, 0.0, 0.0],
@@ -21,4 +24,9 @@ class Axes(Mesh):
             [0, 0, 1],
         ]
 
-        super().__init__(program_id, vertices, colors, GL_LINES, location)
+        super().__init__(
+            vertices=vertices, 
+            vertex_colors=colors,
+            draw_type=GL_LINES,
+            translation=location,
+            material=material)

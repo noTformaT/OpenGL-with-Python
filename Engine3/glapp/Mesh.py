@@ -30,14 +30,16 @@ class Mesh:
         position = GraphicsData("vec3", self.vertices)
         position.create_variable(material.program_id, "position")
 
-        normals = GraphicsData("vec3", v_normals)
-        normals.create_variable(material.program_id, "vertex_normal")
+        if v_normals is not None:
+            normals = GraphicsData("vec3", v_normals)
+            normals.create_variable(material.program_id, "vertex_normal")
 
         colors = GraphicsData("vec3", vertex_colors)
         colors.create_variable(material.program_id, "vertex_color")
 
-        uv = GraphicsData("vec2", v_uvs)
-        uv.create_variable(material.program_id, "vertex_uv")
+        if v_uvs is not None:
+            uv = GraphicsData("vec2", v_uvs)
+            uv.create_variable(material.program_id, "vertex_uv")
 
         self.transfomation_mat = identity_mat()
         self.transfomation_mat = rotateA(self.transfomation_mat, rotation.angle, rotation.axis)

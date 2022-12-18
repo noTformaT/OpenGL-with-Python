@@ -12,9 +12,9 @@ from glapp.Material import *
 class Projections(PyOGLApp):
     def __init__(self) -> None:
         super().__init__(0, 0, 700, 700)
+        
         self.axes = None
-        self.square = None
-        self.triangle = None
+        
         self.teapot = None
         self.monkey = None
         self.crah = None
@@ -23,12 +23,19 @@ class Projections(PyOGLApp):
         self.light_0 = None
         self.light_1 = None
 
+        self.lights = []
+
     def initialize(self):
         mat = Material("Shaders/vert_main_pass.glsl", "Shaders/frag_main_pass.glsl")
+        mat_axes = Material("Shaders/vert_color_vertex.glsl", "Shaders/frag_color_vertex.glsl")
 
         self.camera = Camera(
             w=self.screen_width, 
             h=self.screen_height
+        )
+
+        self.axes = Axes(
+            material=mat_axes
         )
        
         self.teapot = LoadMesh(
@@ -61,11 +68,13 @@ class Projections(PyOGLApp):
             color=pygame.Vector3(0, 0.0, 1.0),
             light_number=0
         )
+        self.lights.append(self.light_0)
 
         self.light_1 = Light(
             position=pygame.Vector3(5, 5, 5),
             color=pygame.Vector3(1.0, 0.843, 0),
             light_number=1)
+        self.lights.append(self.light_1)
 
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
@@ -77,17 +86,14 @@ class Projections(PyOGLApp):
         glClearColor(0, 0, 0, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         
-        #self.teapot.update()
-        #self.monkey.update()
-        #self.crash.update()
-        #self.cortex.update()
-        
-        #self.square.draw()
-        #self.triangle.draw()
-        #self.axes.draw()
-        #self.cube.draw()
+        self.teapot.update()
+        self.monkey.update()
+        self.crash.update()
+        self.cortex.update()
 
         self.camera.update_control()
+
+        self.axes.draw(self.camera, self.light_0)
         
         self.teapot.draw(self.camera, self.light_0)
         self.monkey.draw(self.camera, self.light_0)
