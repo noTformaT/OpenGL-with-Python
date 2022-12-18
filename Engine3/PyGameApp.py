@@ -33,13 +33,31 @@ class Projections(PyOGLApp):
         self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
         #self.axes = Axes(self.program_id)
         #self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
-        self.teapot = LoadMesh("Resources/teapot.obj", self.program_id, 
+       
+        self.teapot = LoadMesh(
+            file_name="Resources/teapot.obj", 
             location=pygame.Vector3(0, 0, 0),
             scale=pygame.Vector3(1,1,1), 
-            rotation=Rotation(0, pygame.Vector3(0, 1, 0)))
-        self.monkey = LoadMesh("Resources/monkey_hd.obj", self.program_id, location=pygame.Vector3(4, 1.5, 0))
-        self.crash = LoadMesh("Resources/crash.obj", self.program_id, location=pygame.Vector3(-4, 0.0, 0))
-        self.cortex = LoadMesh("Resources/donut.obj", self.program_id, location=pygame.Vector3(0, 4.5, 0))
+            rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
+            material=mat)
+        
+        self.monkey = LoadMesh(
+            file_name="Resources/monkey_hd.obj",
+            location=pygame.Vector3(4, 1.5, 0),
+            material=mat
+        )
+
+        self.crash = LoadMesh(
+            file_name="Resources/crash.obj",
+            location=pygame.Vector3(-4, 0.0, 0),
+            material=mat
+        )
+
+        self.cortex = LoadMesh(
+            file_name="Resources/donut.obj", 
+            location=pygame.Vector3(0, 4.5, 0),
+            material=mat
+        )
 
         #self.light_0 = Light(self.program_id, pygame.Vector3(5, 5, 5), pygame.Vector3(0, 0.341, 0.717), 0)
         #self.light_1 = Light(self.program_id, pygame.Vector3(-5, 5, 5), pygame.Vector3(1.0, 0.843, 0), 1)
