@@ -56,7 +56,12 @@ class Mesh:
         self.transfomation.update_data(self.transfomation_mat)
 
 
-    def draw(self):
+    def draw(self, camera, light):
+        self.material.use()
+
+        camera.update(self.material.program_id)
+        light.update(self.material.program_id)
+
         self.texture.load()
         self.transfomation.load()
         glBindVertexArray(self.vao_ref)

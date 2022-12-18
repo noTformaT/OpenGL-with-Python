@@ -15,7 +15,6 @@ class Projections(PyOGLApp):
         self.axes = None
         self.square = None
         self.triangle = None
-        #self.cube = None
         self.teapot = None
         self.monkey = None
         self.crah = None
@@ -27,12 +26,10 @@ class Projections(PyOGLApp):
     def initialize(self):
         mat = Material("Shaders/vert_main_pass.glsl", "Shaders/frag_main_pass.glsl")
 
-        self.program_id = mat.program_id
-        #self.square = Square(self.program_id, pygame.Vector3(0, -1, -1))
-        #self.triangle = Triangle(self.program_id, pygame.Vector3(0, 0, 0))
-        self.camera = Camera(self.program_id, self.screen_width, self.screen_height)
-        #self.axes = Axes(self.program_id)
-        #self.cube = Cube(self.program_id, pygame.Vector3(0, -2, 0))
+        self.camera = Camera(
+            w=self.screen_width, 
+            h=self.screen_height
+        )
        
         self.teapot = LoadMesh(
             file_name="Resources/teapot.obj", 
@@ -59,11 +56,16 @@ class Projections(PyOGLApp):
             material=mat
         )
 
-        #self.light_0 = Light(self.program_id, pygame.Vector3(5, 5, 5), pygame.Vector3(0, 0.341, 0.717), 0)
-        #self.light_1 = Light(self.program_id, pygame.Vector3(-5, 5, 5), pygame.Vector3(1.0, 0.843, 0), 1)
+        self.light_0 = Light(
+            position=pygame.Vector3(-5, 5, 5),
+            color=pygame.Vector3(0, 0.0, 1.0),
+            light_number=0
+        )
 
-        self.light_0 = Light(self.program_id, pygame.Vector3(-5, 5, 5), pygame.Vector3(0, 0.0, 1.0), 0)
-        self.light_1 = Light(self.program_id, pygame.Vector3(5, 5, 5), pygame.Vector3(1.0, 0.843, 0), 1)
+        self.light_1 = Light(
+            position=pygame.Vector3(5, 5, 5),
+            color=pygame.Vector3(1.0, 0.843, 0),
+            light_number=1)
 
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
@@ -74,11 +76,6 @@ class Projections(PyOGLApp):
     def display(self):
         glClearColor(0, 0, 0, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glUseProgram(self.program_id)
-        self.camera.update()
-
-        self.light_0.update()
-        self.light_1.update()
         
         #self.teapot.update()
         #self.monkey.update()
@@ -89,10 +86,12 @@ class Projections(PyOGLApp):
         #self.triangle.draw()
         #self.axes.draw()
         #self.cube.draw()
+
+        self.camera.update_control()
         
-        self.teapot.draw()
-        self.monkey.draw()
-        self.crash.draw()
-        self.cortex.draw()
+        self.teapot.draw(self.camera, self.light_0)
+        self.monkey.draw(self.camera, self.light_0)
+        self.crash.draw(self.camera, self.light_0)
+        self.cortex.draw(self.camera, self.light_0)
 
 Projections().mainLoop()

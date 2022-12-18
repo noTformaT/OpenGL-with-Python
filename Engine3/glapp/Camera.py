@@ -6,7 +6,10 @@ from .Transformations import *
 from .Uniform import *
 
 class Camera:
-    def __init__(self, program_id, w, h) -> None:
+    def __init__(self, 
+            w, 
+            h
+        ) -> None:
         self.transformation = identity_mat()
         self.last_mouse = pygame.math.Vector2(pygame.mouse.get_pos())
         self.first_mouse = True
@@ -15,8 +18,6 @@ class Camera:
         self.key_sensitivity = 0.08
         self.projection_mat = self.perspective_mat(60, w/h, 0.01, 10000)
         self.projection = Uniform("mat4", self.projection_mat)
-        self.projection.find_variable(program_id, "projection_mat")
-        self.program_id = program_id
         self.screen_width = w
         self.screen_height = h
 
@@ -41,7 +42,7 @@ class Camera:
         if angle < 170.0 and pitch > 0.0 or angle > 30.0 and pitch < 0.0:
             self.transformation = rotate(self.transformation, pitch, "X", True)
 
-    def update(self):
+    def update_control(self):
         if pygame.mouse.get_visible():
             return
 
@@ -70,8 +71,10 @@ class Camera:
         if (keys[pygame.K_e]):
             self.transformation = translate(self.transformation, 0, self.key_sensitivity, 0)
 
+    def update(self, program_id):
+        self.projection.find_variable(program_id, "projection_mat")
         self.projection.load()
         lookat_mat = self.transformation
         lookat = Uniform("mat4", lookat_mat)
-        lookat.find_variable(self.program_id, "view_mat")
+        lookat.find_variable(program_id, "view_mat")
         lookat.load()
