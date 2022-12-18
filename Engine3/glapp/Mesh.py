@@ -58,11 +58,14 @@ class Mesh:
         self.transfomation.update_data(self.transfomation_mat)
 
 
-    def draw(self, camera, light):
+    def draw(self, camera, lights):
         self.material.use()
 
         camera.update(self.material.program_id)
-        light.update(self.material.program_id)
+
+        if lights is not None:
+            for light in lights:
+                light.update(self.material.program_id)
 
         self.texture.load()
         self.transfomation.load()

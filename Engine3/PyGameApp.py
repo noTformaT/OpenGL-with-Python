@@ -93,11 +93,11 @@ class Projections(PyOGLApp):
 
         self.camera.update_control()
 
-        self.axes.draw(self.camera, self.light_0)
+        self.axes.draw(self.camera, None)
         
-        self.teapot.draw(self.camera, self.light_0)
-        self.monkey.draw(self.camera, self.light_0)
-        self.crash.draw(self.camera, self.light_0)
-        self.cortex.draw(self.camera, self.light_0)
+        self.teapot.draw(self.camera, self.lights)
+        self.monkey.draw(self.camera, self.lights)
+        self.crash.draw(self.camera, self.lights)
+        self.cortex.draw(self.camera, self.lights)
 
 Projections().mainLoop()
