@@ -7,7 +7,7 @@ from .Transformations import *
 
 
 class LoadMesh(Mesh):
-    def __init__(self, file_name, program_id, draw_type=GL_TRIANGLES, 
+    def __init__(self, file_name, program_id, image_name="Resources/uv.png", draw_type=GL_TRIANGLES, 
                 location=pygame.Vector3(0, 0, 0),
                 rotation=Rotation(0, pygame.Vector3(0, 1, 0)), 
                 scale=pygame.Vector3(1, 1, 1)) -> None:
@@ -24,7 +24,7 @@ class LoadMesh(Mesh):
             #c.append(random.random())
             #c.append(random.random())
             colors.append([1, 1, 1])
-        super().__init__(program_id, vertices, vertex_normal, vertex_uv, colors, draw_type, location, rotation, scale)
+        super().__init__(program_id, vertices, vertex_normal, vertex_uv, colors, draw_type, image_name, location, rotation, scale)
 
     def load_drawing(self, file_name):
         vertices = []

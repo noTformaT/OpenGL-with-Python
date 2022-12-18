@@ -59,6 +59,7 @@ struct Light
 };
 
 uniform Light lights_data[NUM_LIGHTS];
+uniform sampler2D tex;
 
 vec4 CreateLight(vec3 lightPos, vec3 lightColor, vec3 normal, vec3 fragPos, vec3 viewPos)
 {
@@ -111,10 +112,15 @@ vec4 CalcAllPoints()
 
 void main()
 {
-    vec4 final_color = vec4(color, 1); 
+    vec4 uv_color = texture(tex, uv);
+    
+    vec4 final_color = vec4(color, 1) * uv_color; 
+    
     final_color *= CalcAllPoints();
 
     frag_color = final_color;
+
+    //frag_color = uv_color;
 }
 '''
 
@@ -155,11 +161,13 @@ class Projections(PyOGLApp):
         self.light_1 = Light(self.program_id, pygame.Vector3(5, 5, 5), pygame.Vector3(1.0, 0.843, 0), 1)
 
         glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
 
     def camera_init(self):
         pass
 
     def display(self):
+        glClearColor(0, 0, 0, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(self.program_id)
         self.camera.update()
@@ -167,15 +175,16 @@ class Projections(PyOGLApp):
         self.light_0.update()
         self.light_1.update()
         
-        self.teapot.update()
-        self.monkey.update()
-        self.crash.update()
-        self.cortex.update()
+        #self.teapot.update()
+        #self.monkey.update()
+        #self.crash.update()
+        #self.cortex.update()
         
         #self.square.draw()
         #self.triangle.draw()
         #self.axes.draw()
         #self.cube.draw()
+        
         self.teapot.draw()
         self.monkey.draw()
         self.crash.draw()

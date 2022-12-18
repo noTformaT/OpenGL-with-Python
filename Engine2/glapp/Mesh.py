@@ -4,9 +4,10 @@ from .GraphicsData import *
 import numpy as np
 from .Uniform import *
 from .Transformations import *
+from .Texture import *
 
 class Mesh:
-    def __init__(self, program_id, vertices, v_normals, v_uvs, vertex_colors, draw_type, 
+    def __init__(self, program_id, vertices, v_normals, v_uvs, vertex_colors, draw_type, image_name, 
         translation=pygame.Vector3(0, 0, 0),
         rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
         sc=pygame.Vector3(1, 1, 1)) -> None:
@@ -39,12 +40,17 @@ class Mesh:
         self.transfomation = Uniform("mat4", self.transfomation_mat)
         self.transfomation.find_variable(program_id, "model_mat")
 
+        self.image = Texture(image_name)
+        self.texture = Uniform("sampler2D", [self.image.texture_id, 1])
+        self.texture.find_variable(program_id, "tex")
+
     def add_rotation(self):
         self.transfomation_mat = rotateA(self.transfomation_mat, 3, pygame.Vector3(0, 1, 0))
         self.transfomation.update_data(self.transfomation_mat)
 
 
     def draw(self):
+        self.texture.load()
         self.transfomation.load()
         glBindVertexArray(self.vao_ref)
         glDrawArrays(self.draw_type, 0, len(self.vertices))

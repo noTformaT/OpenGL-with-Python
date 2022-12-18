@@ -8,9 +8,9 @@ class Texture():
 
         if file_name is not None:
             self.surface = pygame.image.load(file_name)
-            self.load()
+            self.load_texture()
 
-    def load(self):
+    def load_texture(self):
         width = self.surface.get_width()
         height = self.surface.get_height()
 
@@ -24,3 +24,6 @@ class Texture():
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
 
         glBindTexture(GL_TEXTURE_2D, 0)
+
+    def load(self):
+        glBindTexture(GL_TEXTURE_2D, self.texture_id)
