@@ -18,7 +18,8 @@ class Mesh:
             translation=pygame.Vector3(0, 0, 0),
             rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
             sc=pygame.Vector3(1, 1, 1),
-            material=None
+            material=None,
+            world_cube_map=None
         ) -> None:
 
         self.material = material
@@ -53,6 +54,12 @@ class Mesh:
         self.texture = Uniform("sampler2D", [self.image.texture_id, 1])
         self.texture.find_variable(material.program_id, "tex")
 
+        self.world_cube_map = None
+        if world_cube_map is not None:
+            self.world_cube_map = Uniform("samplerCube", [world_cube_map.texture_id, 2])
+            self.world_cube_map.find_variable(material.program_id, "skybox")
+
+
     def add_rotation(self):
         self.transfomation_mat = rotateA(self.transfomation_mat, 3, pygame.Vector3(0, 1, 0))
         self.transfomation.update_data(self.transfomation_mat)
@@ -68,6 +75,10 @@ class Mesh:
                 light.update(self.material.program_id)
 
         self.texture.load()
+
+        if self.world_cube_map is not None:
+            self.world_cube_map.load()
+
         self.transfomation.load()
         glBindVertexArray(self.vao_ref)
         glDrawArrays(self.draw_type, 0, len(self.vertices))

@@ -14,7 +14,8 @@ class LoadMesh(Mesh):
                 location=pygame.Vector3(0, 0, 0),
                 rotation=Rotation(0, pygame.Vector3(0, 1, 0)), 
                 scale=pygame.Vector3(1, 1, 1),
-                material=None
+                material=None,
+                world_cubemap=None
         ) -> None:
         coordinates, triangles, uvs, uvs_ind, normals, normal_ind = self.load_drawing(file_name)
         
@@ -40,7 +41,8 @@ class LoadMesh(Mesh):
             translation=location,
             rotation=rotation,
             sc=scale,
-            material=material)
+            material=material,
+            world_cube_map=world_cubemap)
 
     def load_drawing(self, file_name):
         vertices = []

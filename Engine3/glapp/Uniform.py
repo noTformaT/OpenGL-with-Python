@@ -23,3 +23,8 @@ class Uniform:
             glActiveTexture(GL_TEXTURE0 + texture_unit)
             glBindTexture(GL_TEXTURE_2D, texture_obj)
             glUniform1i(self.variable_id, texture_unit)
+        elif self.data_type == "samplerCube":
+            texture_obj, texture_unit = self.data
+            glActiveTexture(GL_TEXTURE0 + texture_unit)
+            glBindTexture(GL_TEXTURE_CUBE_MAP, texture_obj)
+            glUniform1i(self.variable_id, texture_unit)
