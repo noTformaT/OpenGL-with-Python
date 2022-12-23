@@ -69,7 +69,7 @@ class Projections(PyOGLApp):
             location=pygame.Vector3(0, 0, 0),
             scale=pygame.Vector3(1,1,1), 
             rotation=Rotation(0, pygame.Vector3(0, 1, 0)),
-            material=mat_metal,
+            material=mat_glass,
             world_cubemap=self.world_cubemap
         )
         
